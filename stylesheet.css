@@ -1,0 +1,43 @@
+#words-display {
+  display: flex;
+  flex-direction: flex-start;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+#words-display > * {
+  font-size: 26px;
+  font-weight: 500;
+  padding: 0 10px 0 10px;
+}
+.current {
+  background-color: #ccc;
+}
+.correct {
+  color: green;
+}
+.incorrect {
+  color: red;
+}
+input {
+  margin-top: 30px;
+  height: 30px;
+  width: 500px;
+  outline: none;
+  padding: 10px;
+  font-size: 26px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background-color: brown;
+  color: white;
+}
+
+#result {
+  margin-top: 20px;
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+#result > * {
+  padding: 0 10px 0 10px;
+}
