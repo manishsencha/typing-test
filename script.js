@@ -2017,41 +2017,41 @@ function start_timer() {
   }, 1000);
 }
 
-  $("#word_input").on("keyup", function (e) {
-    if(!timer_started) return; 
-    if (e.keyCode === 32) {
-      var w_input = (word_input.value + "").trim();
-      if (w_input === "") {
-        $("#word_input").val("");
-        return;
-      }
-      // console.log((word_input.value+"").trim());
-      if (w_input === words[current_word]) {
-        correct_words++;
-        document
-          .querySelectorAll(".word")
-          [current_word].classList.add("correct");
-      } else {
-        wrong_words++;
-        document
-          .querySelectorAll(".word")
-          [current_word].classList.add("incorrect");
-      }
+$("#word_input").on("keyup", function (e) {
+  if (!timer_started) return;
+  if (e.keyCode === 32) {
+    var w_input = (word_input.value + "").trim();
+    if (w_input === "") {
+      $("#word_input").val("");
+      return;
+    }
+    // console.log((word_input.value+"").trim());
+    if (w_input === words[current_word]) {
+      correct_words++;
+      document.querySelectorAll(".word")[current_word].classList.add("correct");
+    } else {
+      wrong_words++;
       document
         .querySelectorAll(".word")
-        [current_word].classList.remove("current");
-      current_word++;
-      if (current_word === 20) {
-        current_word = 0;
-        update_words();
-      }
-      document.querySelectorAll(".word")[current_word].classList.add("current");
-      $("#word_input").val("");
+        [current_word].classList.add("incorrect");
     }
-  });
+    document
+      .querySelectorAll(".word")
+      [current_word].classList.remove("current");
+    current_word++;
+    if (current_word === 20) {
+      current_word = 0;
+      update_words();
+    }
+    document.querySelectorAll(".word")[current_word].classList.add("current");
+    $("#word_input").val("");
+  }
+});
 
 t.addEventListener("click", function () {
   distance = 60;
+  wrong_words = 0;
+  correct_words = 0;
   res.classList.replace("d-flex", "d-none");
   t.setAttribute("disabled", "true");
   word_input.removeAttribute("disabled");
@@ -2061,6 +2061,8 @@ t.addEventListener("click", function () {
 
 function reset_w() {
   distance = -1;
+  wrong_words = 0;
+  correct_words = 0;
   document.querySelector(".timer").innerText = "Start";
   res.classList.replace("d-flex", "d-none");
   update_words();
