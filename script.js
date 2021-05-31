@@ -1987,14 +1987,17 @@ function update_words() {
 }
 update_words();
 
-var distance = 30;
+var distance = 60;
+var timer_started = false;
 
 function start_timer() {
+  timer_started = true;
   var timer = setInterval(function () {
     distance--;
     t.innerText = distance + "s";
     // console.log(distance);
     if (distance < 0) {
+      timer_started = false;
       t.innerText = "Restart";
       t.removeAttribute("disabled");
       clearInterval(timer);
@@ -2005,45 +2008,50 @@ function start_timer() {
       correct_words_count.innerText = correct_words;
       wrong_words_count.innerText = wrong_words;
       var acc =
-        parseFloat(correct_words * 100) / parseFloat(correct_words) +
-        parseFloat(wrong_words);
+        parseFloat(correct_words * 100) /
+        (parseFloat(correct_words) + parseFloat(wrong_words));
       accuracy.innerText = acc.toFixed() + "%";
+      current_word = 0;
+      $("#word_input").val("");
     }
   }, 1000);
 }
 
-$("#word_input").on("keyup", function (e) {
-  if (e.keyCode === 32) {
-    var w_input = (word_input.value + "").trim();
-    if (w_input === "") {
-      $("#word_input").val("");
-      return;
-    }
-    // console.log((word_input.value+"").trim());
-    if (w_input === words[current_word]) {
-      correct_words++;
-      document.querySelectorAll(".word")[current_word].classList.add("correct");
-    } else {
-      wrong_words++;
+  $("#word_input").on("keyup", function (e) {
+    if(!timer_started) return; 
+    if (e.keyCode === 32) {
+      var w_input = (word_input.value + "").trim();
+      if (w_input === "") {
+        $("#word_input").val("");
+        return;
+      }
+      // console.log((word_input.value+"").trim());
+      if (w_input === words[current_word]) {
+        correct_words++;
+        document
+          .querySelectorAll(".word")
+          [current_word].classList.add("correct");
+      } else {
+        wrong_words++;
+        document
+          .querySelectorAll(".word")
+          [current_word].classList.add("incorrect");
+      }
       document
         .querySelectorAll(".word")
-        [current_word].classList.add("incorrect");
+        [current_word].classList.remove("current");
+      current_word++;
+      if (current_word === 20) {
+        current_word = 0;
+        update_words();
+      }
+      document.querySelectorAll(".word")[current_word].classList.add("current");
+      $("#word_input").val("");
     }
-    document
-      .querySelectorAll(".word")
-      [current_word].classList.remove("current");
-    current_word++;
-    if (current_word === 20) {
-      current_word = 0;
-      update_words();
-    }
-    document.querySelectorAll(".word")[current_word].classList.add("current");
-    $("#word_input").val("");
-  }
-});
+  });
 
 t.addEventListener("click", function () {
-  distance = 30;
+  distance = 60;
   res.classList.replace("d-flex", "d-none");
   t.setAttribute("disabled", "true");
   word_input.removeAttribute("disabled");
@@ -2052,9 +2060,9 @@ t.addEventListener("click", function () {
 });
 
 function reset_w() {
-  correct_words = 0;
-  wrong_words = 0;
-  current = 0;
+  distance = -1;
+  document.querySelector(".timer").innerText = "Start";
+  res.classList.replace("d-flex", "d-none");
   update_words();
 }
 
