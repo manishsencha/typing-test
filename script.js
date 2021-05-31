@@ -1953,66 +1953,109 @@ var wordList = [
   "zulu",
 ];
 
-const wordsDisplay = document.querySelector("#words-display");
-const result = document.querySelector("#result");
-var word_arr = new Array(20);
+var words = new Array(20);
 
-function create_word_list() {
-  for (let i = 0; i < 20; ++i) {
-    word_arr[i] = wordList[Math.floor(Math.random() * wordList.length)];
+function generate_words() {
+  for (var i = 0; i < 20; ++i) {
+    words[i] = wordList[Math.floor(Math.random() * wordList.length)];
   }
 }
 
-function add_word_to_elements() {
-  create_word_list();
-  for (let i = 0; i < 20; ++i) {
-    var div = document.createElement("div");
-    div.className = "word";
-    if (i === 0) {
-      div.classList.add("current");
-    }
-    div.innerText = word_arr[i];
-    wordsDisplay.appendChild(div);
-  }
-}
+const word_container = document.querySelector(".word-container");
+const word_input = document.querySelector("#word_input");
+const t = document.querySelector(".timer");
+const reset = document.querySelector(".reset");
+const res = document.querySelector(".result-container");
+const correct_words_count = document.querySelector(".correct-words-count");
+const wrong_words_count = document.querySelector(".wrong-words-count");
+const accuracy = document.querySelector(".accuracy");
 
-add_word_to_elements();
+var correct_words = 0;
+var wrong_words = 0;
+
 var current_word = 0;
-function next_word() {
-  current_word++;
-  if (current_word === 20) {
-    wordsDisplay.innerText = "";
-    add_word_to_elements();
-    current_word = 0;
-  }
-  document.querySelector(".current").classList.remove("current");
-  document.querySelectorAll(".word")[current_word].classList.add("current");
-  document.querySelector(".correct").innerText = correct_count.toString();
-  document.querySelector(".incorrect").innerText = incorrect_count.toString();
+function update_words() {
+  generate_words();
+  word_container.innerText = "";
+  words.forEach((word) => {
+    var d = document.createElement("div");
+    d.className = "word";
+    d.innerText = word;
+    word_container.appendChild(d);
+  });
+  document.querySelectorAll(".word")[0].classList.add("current");
+}
+update_words();
+
+var distance = 30;
+
+function start_timer() {
+  var timer = setInterval(function () {
+    distance--;
+    t.innerText = distance + "s";
+    // console.log(distance);
+    if (distance < 0) {
+      t.innerText = "Restart";
+      t.removeAttribute("disabled");
+      clearInterval(timer);
+      res.classList.replace("d-none", "d-flex");
+      word_container.innerText = "";
+      word_input.setAttribute("disabled", "true");
+      update_words();
+      correct_words_count.innerText = correct_words;
+      wrong_words_count.innerText = wrong_words;
+      var acc =
+        parseFloat(correct_words * 100) / parseFloat(correct_words) +
+        parseFloat(wrong_words);
+      accuracy.innerText = acc.toFixed() + "%";
+    }
+  }, 1000);
 }
 
-var correct_count = 0,
-  incorrect_count = 0,
-  word_entered = "";
-
-document.body.onkeyup = function (e) {
+$("#word_input").on("keyup", function (e) {
   if (e.keyCode === 32) {
-    var d = document.createElement("div");
-    d.innerText = word_arr[current_word] + " : " + word_entered;
-    result.appendChild(d);
-    if (word_arr[current_word] === word_entered) {
-      correct_count++;
-      document.querySelector(".current").classList.add("correct");
-    } else {
-      incorrect_count++;
-      document.querySelector(".current").classList.add("incorrect");
+    var w_input = (word_input.value + "").trim();
+    if (w_input === "") {
+      $("#word_input").val("");
+      return;
     }
-
-    word_entered = "";
-    next_word();
-    document.querySelector(".correct").innerText = correct_count.toString();
-    document.querySelector(".incorrect").innerText = incorrect_count.toString();
-  } else if (e.keyCode >= 65 && e.keyCode <= 90) {
-    word_entered = word_entered + String.fromCharCode(e.keyCode).toLowerCase();
+    // console.log((word_input.value+"").trim());
+    if (w_input === words[current_word]) {
+      correct_words++;
+      document.querySelectorAll(".word")[current_word].classList.add("correct");
+    } else {
+      wrong_words++;
+      document
+        .querySelectorAll(".word")
+        [current_word].classList.add("incorrect");
+    }
+    document
+      .querySelectorAll(".word")
+      [current_word].classList.remove("current");
+    current_word++;
+    if (current_word === 20) {
+      current_word = 0;
+      update_words();
+    }
+    document.querySelectorAll(".word")[current_word].classList.add("current");
+    $("#word_input").val("");
   }
-};
+});
+
+t.addEventListener("click", function () {
+  distance = 30;
+  res.classList.replace("d-flex", "d-none");
+  t.setAttribute("disabled", "true");
+  word_input.removeAttribute("disabled");
+  $("#word_input").focus();
+  start_timer();
+});
+
+function reset_w() {
+  correct_words = 0;
+  wrong_words = 0;
+  current = 0;
+  update_words();
+}
+
+document.querySelector(".reset").addEventListener("click", reset_w);

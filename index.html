@@ -4,22 +4,100 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <title>Typing test</title>
     <link rel="stylesheet" href="stylesheet.css" />
   </head>
   <body>
-    <h1 style="font-size: 40px;">Typing Test</h1>
-    <h1>
-      Correct Words :
-      <div class="correct"></div>
-    </h1>
-    <h1>
-      Incorrect Words :
-      <div class="incorrect"></div>
-    </h1>
-    <div id="words-display"></div>
-
-    <div id="result"></div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Typing Test</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="https://manishsencha.github.io"
+                target="_blank"
+                >Portfolio</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="https://github.com/manishsencha"
+                target="_blank"
+                >Github</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="https://github.com/manishsencha/typing-test"
+                target="_blank"
+                >Project-Github</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container mt-3">
+      <div class="test-container border p-2">
+        <div
+          class="
+            word-container
+            d-flex
+            flex-row
+            justify-content-center
+            flex-wrap
+          "
+        ></div>
+        <div class="input-controls mt-3 d-flex">
+          <input
+            name="word_input"
+            id="word_input"
+            class="form-control bg-light mx-1"
+            disabled="true"
+          />
+          <button class="btn btn-secondary reset mx-1">Reset</button>
+          <button class="btn btn-primary timer mx-1">Start</button>
+        </div>
+      </div>
+      <div class="result-container d-none flex-column border mt-3">
+        <div class="d-flex flex-row justify-content-around border py-3">
+          <div style="font-weight: bold">Correct Words :</div>
+          <div class="correct-words-count"></div>
+        </div>
+        <div class="d-flex flex-row justify-content-around border py-3">
+          <div style="font-weight: bold">Wrong Words :</div>
+          <div class="wrong-words-count"></div>
+        </div>
+        <div class="d-flex flex-row justify-content-around border py-3">
+          <div style="font-weight: bold">Accuracy :</div>
+          <div class="accuracy"></div>
+        </div>
+      </div>
+    </div>
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>
